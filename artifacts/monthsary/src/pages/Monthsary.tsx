@@ -12,7 +12,7 @@ I hope and I truly hope, that for all my shortcomings, my flaws, and the times I
 
 Always remember hon that I didn't chose you for a season, but I chose you with a future in mind. I'm always here to build, to fight through the difficult parts, and always stay by your side always and always.
 
-I love you my constant, my cutiepie, my ka-duo sa ML, my sometimes masungit na girlfriend, my romcom watch buddy, my teacher in cooking and medical field, my future nurse, my wifey, my prettiest, hottest, most beautiful Honey… my Mary Iris ❤️
+I love you my constant, my cutiepie, my ka-duo sa ML, my sometimes masungit na girlfriend, my romcom watch buddy, my teacher in cooking and medical field, my future registered nurse, my wifey, my prettiest, hottest, most beautiful Honey… my Mary Iris ❤️
 
 I'm so glad you're mine.
 I'm so glad I get to be yours.
