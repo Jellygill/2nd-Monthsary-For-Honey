@@ -253,7 +253,7 @@ export default function Anniversary() {
               textShadow: `0 0 24px rgba(224,80,122,0.25)`,
               lineHeight:  1.45,
             }}>
-              Hey love… I made something for you ❤️
+              Hey Honey… I made something for you ❤️
             </h1>
           </motion.div>
         </motion.div>
