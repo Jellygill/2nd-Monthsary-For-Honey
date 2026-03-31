@@ -10,9 +10,9 @@ First of all hon, before I get too emotional right now, I just want to say thank
 
 I hope and I truly hope, that for all my shortcomings, my flaws, and the times I've disappointed you, I hope it will all be embraced by my warmth love that I give you every single day.
 
-Always remember hon that I didn't chose you for a season, but I chose you with a future in mind. I'm always here to build, to fight through the difficult parts, and always stay by your side whenever you need me.
+Always remember hon that I didn't chose you for a season, but I chose you with a future in mind. I'm always here to build, to fight through the difficult parts, and always stay by your side always and always.
 
-I love you my constant, my cutiepie, my ka-duo sa ML, my sometimes masungit na girlfriend, my wifey, my prettiest, hottest, most beautiful Honey… my Mary Iris ❤️
+I love you my constant, my cutiepie, my ka-duo sa ML, my sometimes masungit na girlfriend, my romcom watch buddy, my teacher in cooking and medical field, my future nurse, my wifey, my prettiest, hottest, most beautiful Honey… my Mary Iris ❤️
 
 I'm so glad you're mine.
 I'm so glad I get to be yours.
@@ -132,6 +132,32 @@ const FloatingHeartsEnding = () => (
   </div>
 );
 
+/* ─── Floating Petals ─── */
+const FloatingPetals = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+    {Array.from({ length: 25 }).map((_, i) => (
+      <div key={`p${i}`} className="absolute" style={{
+        left: `${(i * 7.3 + 12) % 100}%`,
+        top: `-10%`,
+        fontSize: `${14 + (i % 4) * 6}px`,
+        opacity: 0.35 + (i % 3) * 0.2,
+        animation: `fall ${12 + (i % 5) * 4}s linear infinite`,
+        animationDelay: `${(i % 7) * 2}s`,
+        textShadow: '0 0 10px rgba(249,168,192,0.4)',
+      }}>
+        {i % 3 === 0 ? "🌸" : i % 2 === 0 ? "✨" : "💖"}
+      </div>
+    ))}
+    <style dangerouslySetInnerHTML={{__html: `
+      @keyframes fall {
+        0% { transform: translateY(-10vh) rotate(0deg) translateX(0); }
+        50% { transform: translateY(50vh) rotate(180deg) translateX(20px); }
+        100% { transform: translateY(110vh) rotate(360deg) translateX(-20px); }
+      }
+    `}} />
+  </div>
+);
+
 /* ─── Drifting bokeh orb ─── */
 const Orb = ({ style }: { style: React.CSSProperties }) => (
   <div className="absolute rounded-full animate-drift pointer-events-none" style={style} />
@@ -151,10 +177,10 @@ const Waveform = () => (
   </div>
 );
 
-type Scene = 1 | 2 | 3 | 4 | 5;
+type Scene = 0 | 1 | 2 | 3 | 4 | 5;
 
 export default function Monthsary() {
-  const [scene,         setScene]         = useState<Scene>(1);
+  const [scene,         setScene]         = useState<Scene>(0);
   const [showMainText,  setShowMainText]  = useState(false);
   const [showSub1,      setShowSub1]      = useState(false);
   const [countdown,     setCountdown]     = useState(3);
@@ -167,20 +193,23 @@ export default function Monthsary() {
   const audioRef   = useRef<HTMLAudioElement>(null);
   const bgMusicRef = useRef<HTMLAudioElement>(null);
 
-  /* ─── Background music: start on first scene ─── */
+  /* ─── Background music: prepare it but don't autoplay until click ─── */
   useEffect(() => {
     const bg = bgMusicRef.current;
     if (!bg) return;
     bg.volume = 0.6;
     bg.loop   = true;
-    // Attempt autoplay; browsers may block until user interaction
-    bg.play().catch(() => {
-      // If autoplay blocked, play on first click/touch
-      const tryPlay = () => { bg.play().catch(() => {}); document.removeEventListener("click", tryPlay); document.removeEventListener("touchstart", tryPlay); };
-      document.addEventListener("click",      tryPlay, { once: true });
-      document.addEventListener("touchstart", tryPlay, { once: true });
-    });
+    bg.load();
   }, []);
+
+  const handleStart = () => {
+    const bg = bgMusicRef.current;
+    if (bg) {
+      bg.play().catch(() => {});
+    }
+    setScene(1);
+  };
+
 
   /* ─── Helper: smoothly adjust bgMusic volume ─── */
   const fadeBgMusic = (targetVol: number, durationMs: number) => {
@@ -276,14 +305,46 @@ export default function Monthsary() {
   return (
     <div className="relative min-h-[100dvh] w-full overflow-hidden" style={{ background: C.bg }}>
 
-      {/* ══ Persistent rain — visible through scenes 1-3 ══ */}
+      {/* ══ Persistent animations ══ */}
       <motion.div
         className="absolute inset-0 z-0 pointer-events-none"
-        animate={{ opacity: scene <= 3 ? 1 : 0 }}
+        animate={{ opacity: scene >= 1 && scene <= 3 ? 1 : 0 }}
         transition={{ duration: 3, ease: "easeInOut" }}
       >
         <DigitalRain />
       </motion.div>
+
+      {scene > 0 && <FloatingPetals />}
+
+      {/* ════════════════════════════════════════════
+          SCENE 0 — Tap To Open (Fixes autoplay)
+      ════════════════════════════════════════════ */}
+      {scene === 0 && (
+        <motion.div key="s0" className="absolute inset-0 flex items-center justify-center z-50 bg-[#fff0f5]"
+          exit={{ opacity: 0, transition: { duration: 1.5 } }}
+        >
+          <div className="absolute inset-0 pointer-events-none">
+             <Orb style={{ top: "10%", left: "20%", width: 300, height: 300, background: "radial-gradient(circle, rgba(249,168,192,0.3) 0%, transparent 70%)", filter: "blur(40px)" }} />
+             <Orb style={{ bottom: "10%", right: "10%", width: 400, height: 400, background: "radial-gradient(circle, rgba(224,80,122,0.15) 0%, transparent 70%)", filter: "blur(50px)" }} />
+          </div>
+          
+          <button 
+            onClick={handleStart}
+            className="relative flex flex-col items-center justify-center group overflow-hidden transition-all duration-700 hover:scale-105"
+            style={{
+               width: "200px", height: "200px", borderRadius: "50%",
+               background: "rgba(255,255,255,0.7)", backdropFilter: "blur(12px)",
+               border: "2px solid rgba(249,168,192,0.5)",
+               boxShadow: "0 10px 40px rgba(224,80,122,0.15), inset 0 0 20px rgba(255,255,255,0.5)"
+            }}
+          >
+            <span className="text-4xl mb-2 group-hover:animate-pulse">✉️</span>
+            <span style={{ fontFamily: "'Crimson Text', Georgia, serif", fontSize: "1.2rem", color: C.textSoft, fontStyle: "italic" }}>
+              Tap to open
+            </span>
+          </button>
+        </motion.div>
+      )}
 
       {/* ════════════════════════════════════════════
           SCENE 1 — Opening
@@ -641,10 +702,10 @@ export default function Monthsary() {
                 </button>
               </div>
 
-              {/* Voice message: drop your recording as /message.mp3 in the public/ folder */}
-              <audio ref={audioRef} src="/message.mp3" className="hidden" />
-              {/* Background music: drop your track as /background.mp3 in the public/ folder */}
-              <audio ref={bgMusicRef} src="/background.mp3" className="hidden" preload="auto" />
+              {/* Voice message: drop your recording as message.mp3 in the public/ folder */}
+              <audio ref={audioRef} src="message.mp3" className="hidden" />
+              {/* Background music: drop your track as background.mp3 in the public/ folder */}
+              <audio ref={bgMusicRef} src="background.mp3" className="hidden" preload="auto" />
 
               {isPlaying && (
                 <motion.p
