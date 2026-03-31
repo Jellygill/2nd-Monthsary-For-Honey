@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
-const LOVE_LETTER = `My love,
+const LOVE_LETTER = `Honey,
 
 Every single day I wake up feeling incredibly lucky that you are in my life. Time passes differently when we're together—hours feel like seconds, yet in those moments, I feel like I've known you for a lifetime.
 
@@ -307,9 +307,9 @@ export default function Anniversary() {
             transition={{ duration: 2.2, delay: 0.5, ease: "easeOut" }}
           >
             <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(2.2rem, 7.5vw, 5.5rem)", color: C.text, textShadow: `0 2px 16px rgba(224,80,122,0.22)`, lineHeight: 1.2 }}>
-              Happy Anniversary,{" "}
+              Happy 3rd Monthsary,{" "}
               <span style={{ color: C.primary, fontStyle: "italic", textShadow: `0 0 20px rgba(224,80,122,0.38)` }}>
-                my Honey ❤️
+                Honey ❤️
               </span>
             </h1>
             <motion.p
