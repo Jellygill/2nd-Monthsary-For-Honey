@@ -702,11 +702,6 @@ export default function Monthsary() {
                 </button>
               </div>
 
-              {/* Voice message: drop your recording as message.mp3 in the public/ folder */}
-              <audio ref={audioRef} src="message.mp3" className="hidden" />
-              {/* Background music: drop your track as background.mp3 in the public/ folder */}
-              <audio ref={bgMusicRef} src="background.mp3" className="hidden" preload="auto" />
-
               {isPlaying && (
                 <motion.p
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 0.5 }}
@@ -775,6 +770,10 @@ export default function Monthsary() {
           </motion.div>
         </motion.div>
       )}
+      {/* ─── Globally Persistent Audio Players ─── */}
+      <audio ref={audioRef} src="message.mp3" className="hidden" />
+      <audio ref={bgMusicRef} src="background.mp3" className="hidden" preload="auto" />
+
     </div>
   );
 }
