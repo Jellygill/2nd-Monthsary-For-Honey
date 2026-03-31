@@ -1,73 +1,77 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
+/* ─── The letter — rewritten to be deeply personal & emotional ─── */
 const LOVE_LETTER = `Honey,
 
-Every single day I wake up feeling incredibly lucky that you are in my life. Time passes differently when we're together—hours feel like seconds, yet in those moments, I feel like I've known you for a lifetime.
+I never thought three months could feel like this — like finding a place I didn't know I was missing until you quietly became it.
 
-You have become my favorite place to be. With you, I have found a sense of home that I never knew I was looking for. Your laugh is my favorite sound, and your smile is the brightest part of my day.
+Every morning I think of you before I've even opened my eyes. That's what you've become to me — my very first thought and my last, the warmth that turns ordinary moments into something I want to hold onto forever.
 
-Through all the highs and the quiet moments in between, you are my rock, my joy, and my greatest adventure. I promise to keep loving you more with every passing day—to cherish every single moment we have, and to always hold your hand through whatever comes next.
+You make me feel seen, Honey. Truly, completely seen. The way your eyes light up over small things, the way you laugh when something catches you off guard, the way you look at me like I'm somehow enough — I notice all of it. I keep all of it close.
 
-Forever yours, ❤️`;
+Three months of falling a little more every single day. Three months of realizing that what I feel for you isn't just love — it's the kind that settles deep, the kind that grows quietly and stays, the kind I want to keep choosing every single time.
+
+I'm so glad you're mine. I'm so glad I get to be yours.
+
+With everything I am, always ❤️`;
 
 const C = {
   bg:           "#fff0f5",
   bgMid:        "#fce4ed",
   bgDeep:       "#f9cfe0",
-  bgLetter:     "#fdf5f8",
   text:         "#7a1f40",
   textSoft:     "#b05070",
   primary:      "#e0507a",
   primaryLight: "#f9a8c0",
 };
 
+/* ─── Stars scattered in scene 1 ─── */
+const STARS = Array.from({ length: 22 }, (_, i) => ({
+  x:    `${(i * 4.7 + Math.sin(i * 2.3) * 12 + 50) % 100}%`,
+  y:    `${(i * 4.1 + Math.cos(i * 1.9) * 10 + 50) % 100}%`,
+  size: 3 + (i % 4),
+  dur:  `${2 + (i % 5) * 0.6}s`,
+  del:  `${(i % 7) * 0.4}s`,
+}));
+
 /* ─── Digital Rain ─── */
 const DigitalRain = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const resize = () => {
-      canvas.width  = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
+    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
     resize();
     window.addEventListener("resize", resize);
 
-    const chars   = "01❤♡".split("");
-    const fontSize = 16;
-    let columns    = Math.floor(canvas.width / fontSize);
-    let drops: number[] = Array.from({ length: columns }, () => Math.random() * -120);
+    const chars = "01❤♡".split("");
+    const fs = 16;
+    let cols  = Math.floor(canvas.width / fs);
+    let drops: number[] = Array.from({ length: cols }, () => Math.random() * -120);
 
     const draw = () => {
-      const cols = Math.floor(canvas.width / fontSize);
-      if (cols !== columns) {
-        columns = cols;
-        drops   = Array.from({ length: columns }, () => Math.random() * -120);
-      }
+      const nc = Math.floor(canvas.width / fs);
+      if (nc !== cols) { cols = nc; drops = Array.from({ length: cols }, () => Math.random() * -120); }
 
-      ctx.fillStyle = "rgba(255, 240, 245, 0.16)";
+      ctx.fillStyle = "rgba(255,240,245,0.15)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.font      = `${fontSize}px monospace`;
+      ctx.font = `${fs}px monospace`;
       ctx.textAlign = "center";
 
       for (let i = 0; i < drops.length; i++) {
-        const ch    = chars[Math.floor(Math.random() * chars.length)];
-        const x     = i * fontSize + fontSize / 2;
-        const y     = drops[i] * fontSize;
-        const alpha = 0.28 + ((i * 7) % 5) * 0.1;
-
-        ctx.fillStyle   = `rgba(190, 60, 100, ${alpha})`;
+        const ch = chars[Math.floor(Math.random() * chars.length)];
+        const x  = i * fs + fs / 2;
+        const y  = drops[i] * fs;
+        const a  = 0.25 + ((i * 7) % 6) * 0.09;
+        ctx.fillStyle   = `rgba(190,60,100,${a})`;
         ctx.shadowBlur  = 7;
-        ctx.shadowColor = "rgba(220, 80, 120, 0.45)";
+        ctx.shadowColor = "rgba(220,80,120,0.5)";
         ctx.fillText(ch, x, y);
         ctx.shadowBlur  = 0;
-
         if (y > canvas.height && Math.random() > 0.975) drops[i] = 0;
         drops[i]++;
       }
@@ -76,65 +80,69 @@ const DigitalRain = () => {
     const id = setInterval(draw, 55);
     return () => { clearInterval(id); window.removeEventListener("resize", resize); };
   }, []);
-
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />;
 };
 
-/* ─── Glowing particles + hearts for scene 3 ─── */
+/* ─── Glowing particles + hearts (scene 3) ─── */
 const GlowParticles = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    {Array.from({ length: 28 }).map((_, i) => (
+    {Array.from({ length: 32 }).map((_, i) => (
       <div key={i} className="absolute rounded-full animate-float" style={{
-        left:   `${(i * 3.6 + Math.sin(i * 1.8) * 18 + 50) % 100}%`,
+        left:   `${(i * 3.3 + Math.sin(i * 1.7) * 16 + 50) % 100}%`,
         bottom: "-18px",
         width:  `${4 + (i % 5) * 3}px`,
         height: `${4 + (i % 5) * 3}px`,
         background: i % 3 === 0
-          ? `rgba(224,80,122,${0.28 + (i % 4) * 0.1})`
-          : `rgba(249,168,192,${0.22 + (i % 3) * 0.1})`,
-        boxShadow: `0 0 ${6 + (i % 4) * 4}px rgba(224,80,122,0.38)`,
-        animationDuration: `${11 + (i % 8) * 2}s`,
-        animationDelay:    `${(i % 6) * 1.0}s`,
+          ? `rgba(224,80,122,${0.3 + (i % 4) * 0.1})`
+          : `rgba(249,168,192,${0.22 + (i % 3) * 0.12})`,
+        boxShadow: `0 0 ${7 + (i % 4) * 5}px rgba(224,80,122,0.4)`,
+        animationDuration: `${12 + (i % 8) * 1.8}s`,
+        animationDelay:    `${(i % 7) * 0.9}s`,
       }} />
     ))}
-    {Array.from({ length: 14 }).map((_, i) => (
+    {Array.from({ length: 16 }).map((_, i) => (
       <div key={`h${i}`} className="absolute animate-float" style={{
-        left:   `${(i * 7.4 + 8) % 96}%`,
+        left:   `${(i * 6.4 + 8) % 95}%`,
         bottom: "-28px",
-        fontSize: `${12 + (i % 4) * 7}px`,
-        opacity: 0.32 + (i % 4) * 0.1,
-        animationDuration: `${14 + (i % 6) * 2}s`,
-        animationDelay:    `${(i % 5) * 1.4 + 0.5}s`,
+        fontSize: `${10 + (i % 4) * 7}px`,
+        opacity: 0.3 + (i % 4) * 0.12,
+        animationDuration: `${15 + (i % 6) * 1.8}s`,
+        animationDelay:    `${(i % 5) * 1.5 + 0.5}s`,
       }}>❤️</div>
     ))}
   </div>
 );
 
-/* ─── Floating hearts for the ending ─── */
+/* ─── Floating hearts (ending) ─── */
 const FloatingHeartsEnding = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    {Array.from({ length: 28 }).map((_, i) => (
+    {Array.from({ length: 32 }).map((_, i) => (
       <div key={i} className="absolute animate-float" style={{
-        left:   `${(i * 3.7 + Math.sin(i * 1.9) * 10 + 50) % 100}%`,
+        left:   `${(i * 3.5 + Math.sin(i * 2.1) * 10 + 50) % 100}%`,
         bottom: "-50px",
         fontSize: `${10 + (i % 6) * 8}px`,
-        opacity: 0.28 + (i % 5) * 0.1,
-        animationDuration: `${12 + (i % 7) * 2}s`,
-        animationDelay:    `${(i % 6) * 0.8}s`,
+        opacity: 0.25 + (i % 5) * 0.12,
+        animationDuration: `${13 + (i % 7) * 1.8}s`,
+        animationDelay:    `${(i % 7) * 0.7}s`,
       }}>❤️</div>
     ))}
   </div>
 );
 
-/* ─── Audio waveform bars ─── */
+/* ─── Drifting bokeh orb ─── */
+const Orb = ({ style }: { style: React.CSSProperties }) => (
+  <div className="absolute rounded-full animate-drift pointer-events-none" style={style} />
+);
+
+/* ─── Waveform bars ─── */
 const Waveform = () => (
-  <div className="flex items-end gap-[3px] h-8">
-    {Array.from({ length: 12 }).map((_, i) => (
+  <div className="flex items-end gap-[3px] h-9">
+    {Array.from({ length: 14 }).map((_, i) => (
       <div key={i} className="w-[3px] rounded-full animate-wave" style={{
-        animationDelay:    `${i * 0.08}s`,
-        animationDuration: `${0.8 + (i % 3) * 0.2}s`,
-        height:            `${8 + (i % 4) * 6}px`,
-        backgroundColor:   C.primary,
+        animationDelay:    `${i * 0.07}s`,
+        animationDuration: `${0.75 + (i % 4) * 0.18}s`,
+        height: `${6 + (i % 5) * 6}px`,
+        background: `linear-gradient(to top, rgba(224,80,122,0.9), rgba(249,168,192,0.6))`,
       }} />
     ))}
   </div>
@@ -143,23 +151,25 @@ const Waveform = () => (
 type Scene = 1 | 2 | 3 | 4 | 5;
 
 export default function Anniversary() {
-  const [scene,          setScene]          = useState<Scene>(1);
-  const [showScene1Text, setShowScene1Text] = useState(false);
-  const [countdown,      setCountdown]      = useState(3);
-  const [showSubtitle,   setShowSubtitle]   = useState(false);
-  const [typedText,      setTypedText]      = useState("");
-  const [showContinue,   setShowContinue]   = useState(false);
-  const [isPlaying,      setIsPlaying]      = useState(false);
-  const [showFinal,      setShowFinal]      = useState(false);
+  const [scene,         setScene]         = useState<Scene>(1);
+  const [showMainText,  setShowMainText]  = useState(false);
+  const [showSub1,      setShowSub1]      = useState(false);
+  const [countdown,     setCountdown]     = useState(3);
+  const [showSubtitle,  setShowSubtitle]  = useState(false);
+  const [typedText,     setTypedText]     = useState("");
+  const [showContinue,  setShowContinue]  = useState(false);
+  const [isPlaying,     setIsPlaying]     = useState(false);
+  const [showFinal,     setShowFinal]     = useState(false);
 
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  /* Scene 1 — opening message */
+  /* Scene 1 */
   useEffect(() => {
     if (scene !== 1) return;
-    const t1 = setTimeout(() => setShowScene1Text(true), 2000);
-    const t2 = setTimeout(() => setScene(2), 6500);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    const t1 = setTimeout(() => setShowMainText(true), 1600);
+    const t2 = setTimeout(() => setShowSub1(true), 3200);
+    const t3 = setTimeout(() => setScene(2), 7200);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [scene]);
 
   /* Scene 2 — countdown */
@@ -173,11 +183,11 @@ export default function Anniversary() {
     return () => clearTimeout(t);
   }, [scene, countdown]);
 
-  /* Scene 3 — reveal, subtitle then letter */
+  /* Scene 3 — reveal */
   useEffect(() => {
     if (scene !== 3) return;
     const t1 = setTimeout(() => setShowSubtitle(true), 2400);
-    const t2 = setTimeout(() => setScene(4), 7000);
+    const t2 = setTimeout(() => setScene(4), 7500);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [scene]);
 
@@ -190,13 +200,13 @@ export default function Anniversary() {
       setTypedText(LOVE_LETTER.slice(0, i));
       if (i >= LOVE_LETTER.length) {
         clearInterval(t);
-        setTimeout(() => setShowContinue(true), 1500);
+        setTimeout(() => setShowContinue(true), 1800);
       }
-    }, 45);
+    }, 42);
     return () => clearInterval(t);
   }, [scene]);
 
-  /* Scene 5 — wire audio ended → showFinal */
+  /* Scene 5 — audio ended */
   useEffect(() => {
     if (scene !== 5 || !isPlaying) return;
     const audio = audioRef.current;
@@ -205,8 +215,7 @@ export default function Anniversary() {
       audio.addEventListener("ended", onEnd);
       return () => audio.removeEventListener("ended", onEnd);
     }
-    // No real file yet — simulate 8 s
-    const t = setTimeout(() => setShowFinal(true), 8000);
+    const t = setTimeout(() => setShowFinal(true), 9000);
     return () => clearTimeout(t);
   }, [scene, isPlaying]);
 
@@ -218,105 +227,176 @@ export default function Anniversary() {
     }
   };
 
-  const fadeIn = { initial: { opacity: 0 }, animate: { opacity: 1, transition: { duration: 1.5 } } };
+  const fadeIn = { initial: { opacity: 0 }, animate: { opacity: 1, transition: { duration: 1.6 } } };
 
-  /* ─────────────────────────── render ─────────────────────────── */
   return (
     <div className="relative min-h-[100dvh] w-full overflow-hidden" style={{ background: C.bg }}>
 
-      {/* ════ PERSISTENT RAIN — visible through scenes 1, 2, 3 ════ */}
+      {/* ══ Persistent rain — visible through scenes 1-3 ══ */}
       <motion.div
         className="absolute inset-0 z-0 pointer-events-none"
         animate={{ opacity: scene <= 3 ? 1 : 0 }}
-        transition={{ duration: 2.5, ease: "easeInOut" }}
+        transition={{ duration: 3, ease: "easeInOut" }}
       >
         <DigitalRain />
       </motion.div>
 
-      {/* ════ Scene 1 — opening ════ */}
+      {/* ════════════════════════════════════════════
+          SCENE 1 — Opening
+      ════════════════════════════════════════════ */}
       {scene === 1 && (
-        <motion.div
-          key="s1"
-          className="absolute inset-0 flex items-center justify-center z-10"
+        <motion.div key="s1" className="absolute inset-0 flex items-center justify-center z-10"
           variants={fadeIn} initial="initial" animate="animate"
         >
-          <motion.div
-            className="text-center px-6 max-w-2xl"
-            initial={{ opacity: 0, y: 14 }}
-            animate={showScene1Text ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
-            transition={{ duration: 2, ease: "easeOut" }}
-          >
-            <h1 style={{
-              fontFamily: "'Playfair Display', Georgia, serif",
-              fontSize:   "clamp(1.7rem, 5vw, 3.5rem)",
-              color:       C.text,
-              textShadow: `0 0 24px rgba(224,80,122,0.25)`,
-              lineHeight:  1.45,
-            }}>
-              Hey Honey… I made something for you ❤️
-            </h1>
-          </motion.div>
+          {/* Twinkle stars */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            {STARS.map((s, i) => (
+              <div key={i} className="absolute rounded-full animate-twinkle" style={{
+                left: s.x, top: s.y, width: s.size, height: s.size,
+                background: "rgba(224,80,122,0.55)",
+                boxShadow: `0 0 ${s.size * 3}px rgba(224,80,122,0.5)`,
+                animationDuration: s.dur, animationDelay: s.del,
+              }} />
+            ))}
+          </div>
+
+          <div className="relative z-10 text-center px-6 max-w-2xl flex flex-col items-center gap-5">
+            <motion.h1
+              initial={{ opacity: 0, y: 18, filter: "blur(8px)" }}
+              animate={showMainText
+                ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                : { opacity: 0, y: 18, filter: "blur(8px)" }}
+              transition={{ duration: 2.2, ease: "easeOut" }}
+              style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                fontSize:   "clamp(1.8rem, 5.5vw, 3.8rem)",
+                color:       C.text,
+                lineHeight:  1.4,
+                textShadow: `0 0 28px rgba(224,80,122,0.2)`,
+              }}
+            >
+              Hey Honey…{" "}
+              <span className="animate-heartbeat inline-block">❤️</span>
+              <br />
+              <span style={{ fontStyle: "italic", color: C.textSoft, fontSize: "0.88em" }}>
+                I made something just for you.
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={showSub1 ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+              transition={{ duration: 1.6 }}
+              style={{
+                fontFamily: "'Crimson Text', Georgia, serif",
+                fontSize:   "clamp(0.95rem, 2.5vw, 1.25rem)",
+                color:       C.textSoft,
+                letterSpacing: "0.08em",
+                fontStyle:   "italic",
+              }}
+            >
+              get comfortable, this is all for you ✨
+            </motion.p>
+          </div>
         </motion.div>
       )}
 
-      {/* ════ Scene 2 — countdown ════ */}
+      {/* ════════════════════════════════════════════
+          SCENE 2 — Countdown
+      ════════════════════════════════════════════ */}
       {scene === 2 && (
-        <motion.div
-          key="s2"
-          className="absolute inset-0 flex items-center justify-center z-10"
+        <motion.div key="s2" className="absolute inset-0 flex flex-col items-center justify-center z-10 gap-4"
           variants={fadeIn} initial="initial" animate="animate"
         >
           {countdown > 0 && (
             <motion.div
               key={`c${countdown}`}
-              initial={{ opacity: 0, scale: 0.6, filter: "blur(14px)" }}
+              initial={{ opacity: 0, scale: 0.5, filter: "blur(20px)" }}
               animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              transition={{ duration: 0.85, ease: "easeOut" }}
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize:   "clamp(8rem, 26vw, 18rem)",
-                color:       C.primary,
-                textShadow: `0 0 30px rgba(224,80,122,0.4), 0 0 70px rgba(224,80,122,0.18)`,
-                lineHeight:  1,
-              }}
+              exit={{ opacity: 0, scale: 1.3, filter: "blur(12px)" }}
+              transition={{ duration: 0.9, ease: "easeOut" }}
+              className="flex flex-col items-center"
             >
-              {countdown}
+              <span style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                fontSize:   "clamp(9rem, 28vw, 19rem)",
+                color:       C.primary,
+                textShadow: `0 0 30px rgba(224,80,122,0.45), 0 0 80px rgba(224,80,122,0.2)`,
+                lineHeight:  1,
+              }}>
+                {countdown}
+              </span>
+              <motion.p
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35, duration: 0.8 }}
+                style={{
+                  fontFamily: "'Crimson Text', Georgia, serif",
+                  fontSize:   "clamp(0.9rem, 2.5vw, 1.2rem)",
+                  color:       C.textSoft,
+                  letterSpacing: "0.2em",
+                  fontStyle:   "italic",
+                  marginTop:   "-8px",
+                }}
+              >
+                {countdown === 3 ? "something beautiful is coming…"
+                  : countdown === 2 ? "just for you, Honey…"
+                  : "here we go ❤️"}
+              </motion.p>
             </motion.div>
           )}
         </motion.div>
       )}
 
-      {/* ════ Scene 3 — reveal ════ */}
+      {/* ════════════════════════════════════════════
+          SCENE 3 — The Reveal
+      ════════════════════════════════════════════ */}
       {scene === 3 && (
-        <motion.div
-          key="s3"
+        <motion.div key="s3"
           className="absolute inset-0 flex items-center justify-center overflow-hidden z-10"
-          style={{ background: `linear-gradient(160deg, ${C.bg}cc 0%, ${C.bgMid}cc 55%, ${C.bgDeep}cc 100%)` }}
+          style={{ background: `linear-gradient(155deg, ${C.bg}dd 0%, ${C.bgMid}dd 50%, ${C.bgDeep}dd 100%)` }}
           variants={fadeIn} initial="initial" animate="animate"
         >
           <GlowParticles />
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-1/4 left-1/3 w-80 h-80 rounded-full" style={{ background: "radial-gradient(circle, rgba(224,80,122,0.14) 0%, transparent 70%)", filter: "blur(55px)" }} />
-            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full" style={{ background: "radial-gradient(circle, rgba(249,168,192,0.22) 0%, transparent 70%)", filter: "blur(65px)" }} />
-          </div>
+
+          {/* Drifting orbs */}
+          <Orb style={{ top: "10%",  left: "8%",  width: 340, height: 340, background: "radial-gradient(circle, rgba(224,80,122,0.13) 0%, transparent 70%)", filter: "blur(55px)", animationDuration: "22s" }} />
+          <Orb style={{ bottom: "8%", right: "6%", width: 280, height: 280, background: "radial-gradient(circle, rgba(249,168,192,0.22) 0%, transparent 70%)", filter: "blur(60px)", animationDuration: "26s", animationDelay: "4s" }} />
+          <Orb style={{ top: "45%", left: "40%", width: 420, height: 220, background: "radial-gradient(ellipse, rgba(253,220,235,0.35) 0%, transparent 70%)", filter: "blur(45px)", animationDuration: "19s", animationDelay: "2s" }} />
 
           <motion.div
-            className="relative z-10 text-center px-6 max-w-3xl flex flex-col items-center gap-6"
-            initial={{ opacity: 0, y: 28, scale: 0.95 }}
+            className="relative z-10 text-center px-6 max-w-3xl flex flex-col items-center gap-7"
+            initial={{ opacity: 0, y: 32, scale: 0.93 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 2.2, delay: 0.5, ease: "easeOut" }}
+            transition={{ duration: 2.4, delay: 0.4, ease: "easeOut" }}
           >
-            <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(2.2rem, 7.5vw, 5.5rem)", color: C.text, textShadow: `0 2px 16px rgba(224,80,122,0.22)`, lineHeight: 1.2 }}>
+            <h1
+              className="animate-glow leading-snug"
+              style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                fontSize:   "clamp(2.3rem, 8vw, 5.8rem)",
+                color:       C.text,
+                lineHeight:  1.18,
+              }}
+            >
               Happy 3rd Monthsary,{" "}
-              <span style={{ color: C.primary, fontStyle: "italic", textShadow: `0 0 20px rgba(224,80,122,0.38)` }}>
+              <span style={{ color: C.primary, fontStyle: "italic" }}>
                 Honey ❤️
               </span>
             </h1>
+
             <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={showSubtitle ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-              transition={{ duration: 1.7, ease: "easeOut" }}
-              style={{ fontFamily: "'Crimson Text', Georgia, serif", fontSize: "clamp(1.1rem, 3vw, 1.65rem)", color: C.textSoft, maxWidth: "560px", lineHeight: 1.75, fontStyle: "italic" }}
+              initial={{ opacity: 0, y: 12 }}
+              animate={showSubtitle ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+              transition={{ duration: 1.9, ease: "easeOut" }}
+              style={{
+                fontFamily: "'Crimson Text', Georgia, serif",
+                fontSize:   "clamp(1.1rem, 3.2vw, 1.75rem)",
+                color:       C.textSoft,
+                maxWidth:   "560px",
+                lineHeight:  1.8,
+                fontStyle:  "italic",
+              }}
             >
               Out of everything in my life… you'll always be the love of my life and it will always be you ;{">>"}.
             </motion.p>
@@ -324,49 +404,66 @@ export default function Anniversary() {
         </motion.div>
       )}
 
-      {/* ════ Scene 4 — love letter (rain fades out, rich background) ════ */}
+      {/* ════════════════════════════════════════════
+          SCENE 4 — Love Letter
+      ════════════════════════════════════════════ */}
       {scene === 4 && (
-        <motion.div
-          key="s4"
+        <motion.div key="s4"
           className="absolute inset-0 overflow-y-auto flex items-start justify-center z-10"
-          style={{ background: `linear-gradient(155deg, #fff5f8 0%, #fde8f1 35%, #fbd0e4 70%, #f9c4dc 100%)` }}
+          style={{ background: "linear-gradient(160deg, #fff5f8 0%, #fde9f2 30%, #fbd2e6 65%, #f9c6de 100%)" }}
           variants={fadeIn} initial="initial" animate="animate"
         >
-          {/* Decorative bokeh / petal blobs */}
+          {/* Background decoration */}
           <div className="fixed inset-0 pointer-events-none overflow-hidden">
-            {/* Large orbs */}
-            <div className="absolute -top-24 -right-16 w-[500px] h-[500px] rounded-full" style={{ background: "radial-gradient(circle, rgba(249,168,192,0.55) 0%, transparent 65%)", filter: "blur(60px)" }} />
-            <div className="absolute -bottom-24 -left-16 w-[420px] h-[420px] rounded-full" style={{ background: "radial-gradient(circle, rgba(224,80,122,0.22) 0%, transparent 65%)", filter: "blur(70px)" }} />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full" style={{ background: "radial-gradient(ellipse, rgba(253,224,236,0.6) 0%, transparent 70%)", filter: "blur(40px)" }} />
-            {/* Small sparkle dots */}
+            <Orb style={{ top: "-80px",   right: "-60px", width: 520, height: 520, background: "radial-gradient(circle, rgba(249,168,192,0.5) 0%, transparent 65%)", filter: "blur(65px)", animationDuration: "24s" }} />
+            <Orb style={{ bottom: "-80px",left: "-50px",  width: 440, height: 440, background: "radial-gradient(circle, rgba(224,80,122,0.2) 0%, transparent 65%)",  filter: "blur(70px)", animationDuration: "28s", animationDelay: "5s" }} />
+            <Orb style={{ top: "45%",     left: "35%",    width: 640, height: 300, background: "radial-gradient(ellipse, rgba(253,220,235,0.55) 0%, transparent 70%)", filter: "blur(50px)", animationDuration: "20s", animationDelay: "2s" }} />
+            {/* Sparkle dots */}
             {[
-              { t: "8%",  l: "12%", s: 10 }, { t: "22%", l: "88%", s: 8  },
-              { t: "55%", l: "5%",  s: 7  }, { t: "70%", l: "80%", s: 9  },
-              { t: "90%", l: "40%", s: 6  }, { t: "35%", l: "95%", s: 11 },
+              { t: "7%",  l: "10%", s: 9 }, { t: "18%", l: "87%", s: 7  },
+              { t: "52%", l: "4%",  s: 8 }, { t: "68%", l: "82%", s: 10 },
+              { t: "88%", l: "42%", s: 6 }, { t: "33%", l: "94%", s: 8  },
+              { t: "76%", l: "18%", s: 7 }, { t: "10%", l: "62%", s: 5  },
             ].map((d, i) => (
-              <div key={i} className="absolute rounded-full" style={{
+              <div key={i} className="absolute rounded-full animate-twinkle" style={{
                 top: d.t, left: d.l, width: d.s, height: d.s,
-                background: "rgba(224,80,122,0.35)",
-                boxShadow: `0 0 ${d.s * 2}px rgba(224,80,122,0.5)`,
-                animation: `blink ${2 + i * 0.4}s ease-in-out infinite`,
+                background: "rgba(224,80,122,0.5)",
+                boxShadow:  `0 0 ${d.s * 2}px rgba(224,80,122,0.6)`,
+                animationDuration:  `${2.4 + i * 0.35}s`,
+                animationDelay:     `${i * 0.5}s`,
               }} />
             ))}
           </div>
 
-          {/* Paper card effect */}
-          <div className="max-w-2xl w-full mx-auto relative z-10 py-16 px-6 md:px-14">
+          <div className="max-w-2xl w-full mx-auto relative z-10 py-14 px-5 md:px-12">
+            {/* Decorative header */}
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.4, delay: 0.2 }}
+              className="flex flex-col items-center mb-8 gap-2"
+            >
+              <span className="text-3xl animate-heartbeat inline-block">❤️</span>
+              <div className="w-40 h-px" style={{ background: `linear-gradient(to right, transparent, ${C.primaryLight}, transparent)` }} />
+            </motion.div>
+
+            {/* Glass card */}
             <div
               className="rounded-3xl px-8 py-10 md:px-14 md:py-12"
               style={{
-                background: "rgba(255,255,255,0.55)",
-                backdropFilter: "blur(12px)",
-                boxShadow: "0 8px 60px rgba(224,80,122,0.12), 0 2px 12px rgba(224,80,122,0.08)",
-                border: "1px solid rgba(249,168,192,0.35)",
+                background:      "rgba(255,255,255,0.62)",
+                backdropFilter:  "blur(16px)",
+                boxShadow:       "0 10px 70px rgba(224,80,122,0.14), 0 2px 16px rgba(224,80,122,0.08)",
+                border:          "1px solid rgba(249,168,192,0.4)",
               }}
             >
               <div
-                className="leading-loose whitespace-pre-wrap"
-                style={{ fontFamily: "'Crimson Text', Georgia, serif", color: C.text, fontSize: "clamp(1.05rem, 2.5vw, 1.4rem)" }}
+                className="leading-[1.95] whitespace-pre-wrap"
+                style={{
+                  fontFamily: "'Crimson Text', Georgia, serif",
+                  color:       C.text,
+                  fontSize:   "clamp(1.08rem, 2.6vw, 1.42rem)",
+                }}
               >
                 {typedText}
                 <span
@@ -376,17 +473,39 @@ export default function Anniversary() {
               </div>
             </div>
 
+            {/* Decorative footer line */}
             {showContinue && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1 }}
+                className="flex flex-col items-center mt-10 gap-3"
+              >
+                <div className="w-40 h-px" style={{ background: `linear-gradient(to right, transparent, ${C.primaryLight}, transparent)` }} />
+              </motion.div>
+            )}
+
+            {showContinue && (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.2 }}
-                className="mt-14 flex justify-center"
+                transition={{ duration: 1.4, delay: 0.3 }}
+                className="mt-6 flex justify-center"
               >
                 <button
                   onClick={() => setScene(5)}
-                  className="relative px-8 py-3"
-                  style={{ fontFamily: "'Crimson Text', Georgia, serif", color: C.textSoft, letterSpacing: "0.2em", fontSize: "0.85rem", textTransform: "uppercase", background: "transparent", border: "none", cursor: "pointer" }}
+                  className="relative px-10 py-3 group"
+                  style={{
+                    fontFamily:    "'Crimson Text', Georgia, serif",
+                    color:          C.textSoft,
+                    letterSpacing: "0.22em",
+                    fontSize:      "0.85rem",
+                    textTransform: "uppercase",
+                    background:    "transparent",
+                    border:        "none",
+                    cursor:        "pointer",
+                    transition:    "color 0.3s",
+                  }}
                   onMouseEnter={e => (e.currentTarget.style.color = C.primary)}
                   onMouseLeave={e => (e.currentTarget.style.color = C.textSoft)}
                 >
@@ -399,43 +518,60 @@ export default function Anniversary() {
         </motion.div>
       )}
 
-      {/* ════ Scene 5 — voice message + ending (crossfade, no jump) ════ */}
+      {/* ════════════════════════════════════════════
+          SCENE 5 — Voice message + crossfade ending
+      ════════════════════════════════════════════ */}
       {scene === 5 && (
-        <motion.div
-          key="s5"
-          className="absolute inset-0 z-10"
-          style={{ background: `linear-gradient(135deg, ${C.bg} 0%, ${C.bgMid} 60%, ${C.bgDeep} 100%)` }}
+        <motion.div key="s5" className="absolute inset-0 z-10"
+          style={{ background: `linear-gradient(140deg, ${C.bg} 0%, ${C.bgMid} 55%, ${C.bgDeep} 100%)` }}
           variants={fadeIn} initial="initial" animate="animate"
         >
           {/* Ambient orbs */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/3 left-1/4 w-72 h-72 rounded-full" style={{ background: `radial-gradient(circle, rgba(224,80,122,0.1) 0%, transparent 70%)`, filter: "blur(50px)" }} />
-            <div className="absolute bottom-1/3 right-1/4 w-56 h-56 rounded-full" style={{ background: `radial-gradient(circle, rgba(249,168,192,0.2) 0%, transparent 70%)`, filter: "blur(60px)" }} />
-          </div>
+          <Orb style={{ top: "15%",   left: "10%",  width: 300, height: 300, background: `radial-gradient(circle, rgba(224,80,122,0.11) 0%, transparent 70%)`, filter: "blur(55px)", animationDuration: "22s" }} />
+          <Orb style={{ bottom: "10%",right: "8%",  width: 260, height: 260, background: `radial-gradient(circle, rgba(249,168,192,0.22) 0%, transparent 70%)`, filter: "blur(62px)", animationDuration: "25s", animationDelay: "4s" }} />
 
-          {/* Dim overlay when playing */}
+          {/* Pink warmth overlay when playing */}
           <div
-            className="absolute inset-0 pointer-events-none transition-opacity duration-[1200ms]"
-            style={{ background: "rgba(249,168,192,0.2)", opacity: isPlaying && !showFinal ? 1 : 0 }}
+            className="absolute inset-0 pointer-events-none transition-opacity duration-[1400ms]"
+            style={{ background: "rgba(249,168,192,0.18)", opacity: isPlaying && !showFinal ? 1 : 0 }}
           />
 
           {/* ── Audio player — fades out when showFinal ── */}
           <motion.div
             className="absolute inset-0 flex flex-col items-center justify-center px-6"
             animate={{ opacity: showFinal ? 0 : 1 }}
-            transition={{ duration: 2, ease: "easeInOut" }}
+            transition={{ duration: 2.2, ease: "easeInOut" }}
             style={{ pointerEvents: showFinal ? "none" : "auto" }}
           >
-            <div className="flex flex-col items-center text-center w-full max-w-md">
-              <p className="mb-12" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(1.15rem, 4vw, 1.6rem)", color: C.textSoft }}>
-                I also recorded something for you...
-              </p>
+            <div className="flex flex-col items-center text-center w-full max-w-md gap-0">
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.4 }}
+                style={{
+                  fontFamily: "'Playfair Display', Georgia, serif",
+                  fontSize:   "clamp(1.2rem, 4vw, 1.75rem)",
+                  color:       C.textSoft,
+                  lineHeight:  1.55,
+                  marginBottom: "48px",
+                }}
+              >
+                Close your eyes for a moment…
+                <br />
+                <span style={{ fontStyle: "italic", fontSize: "0.85em", color: C.primary }}>
+                  this one is only for you.
+                </span>
+              </motion.p>
 
               <div className="relative flex items-center justify-center">
                 {isPlaying && (
                   <>
-                    <div className="absolute rounded-full animate-pulse-ring" style={{ width: "200px", height: "200px", background: `radial-gradient(circle, rgba(224,80,122,0.2) 0%, transparent 70%)`, filter: "blur(10px)" }} />
-                    <div className="absolute rounded-full" style={{ width: "162px", height: "162px", border: `1px solid rgba(224,80,122,0.22)`, animation: "pulse-ring 2.2s ease-in-out infinite 0.6s" }} />
+                    <div className="absolute rounded-full animate-pulse-ring"
+                      style={{ width: "220px", height: "220px", background: `radial-gradient(circle, rgba(224,80,122,0.18) 0%, transparent 70%)`, filter: "blur(12px)" }} />
+                    <div className="absolute rounded-full"
+                      style={{ width: "172px", height: "172px", border: `1px solid rgba(224,80,122,0.2)`, animation: "pulse-ring 2.5s ease-in-out infinite 0.7s" }} />
+                    <div className="absolute rounded-full"
+                      style={{ width: "148px", height: "148px", border: `1px solid rgba(249,168,192,0.3)`, animation: "pulse-ring 2.5s ease-in-out infinite 0.2s" }} />
                   </>
                 )}
                 <button
@@ -443,63 +579,91 @@ export default function Anniversary() {
                   disabled={isPlaying}
                   className="relative flex flex-col items-center justify-center rounded-full transition-all duration-700"
                   style={{
-                    width: "128px", height: "128px",
-                    border:    `2px solid ${isPlaying ? "rgba(224,80,122,0.5)" : "rgba(224,80,122,0.25)"}`,
-                    background: isPlaying ? "rgba(224,80,122,0.1)" : "rgba(255,255,255,0.6)",
+                    width: "136px", height: "136px",
+                    border:    `2px solid ${isPlaying ? "rgba(224,80,122,0.55)" : "rgba(224,80,122,0.22)"}`,
+                    background: isPlaying ? "rgba(224,80,122,0.1)" : "rgba(255,255,255,0.68)",
                     cursor:     isPlaying ? "default" : "pointer",
-                    transform:  isPlaying ? "scale(1.06)" : "scale(1)",
-                    boxShadow:  isPlaying ? `0 0 36px rgba(224,80,122,0.28)` : "none",
+                    transform:  isPlaying ? "scale(1.08)" : "scale(1)",
+                    boxShadow:  isPlaying ? `0 0 40px rgba(224,80,122,0.28)` : `0 4px 24px rgba(224,80,122,0.12)`,
                   }}
                 >
                   {isPlaying
                     ? <Waveform />
                     : <>
-                        <span style={{ fontSize: "2rem" }}>🎧</span>
-                        <span style={{ fontFamily: "'Crimson Text', Georgia, serif", fontSize: "0.75rem", letterSpacing: "0.15em", color: C.primary, marginTop: "6px" }}>PLAY</span>
+                        <span style={{ fontSize: "2.2rem" }}>🎧</span>
+                        <span style={{ fontFamily: "'Crimson Text', Georgia, serif", fontSize: "0.72rem", letterSpacing: "0.18em", color: C.primary, marginTop: "7px" }}>PLAY</span>
                       </>
                   }
                 </button>
               </div>
 
-              {/* TODO: place your recording in the public folder, e.g. /message.mp3, then set src="/message.mp3" */}
+              {/* TODO: drop your voice message in the public/ folder, e.g. message.mp3, and set src="/message.mp3" */}
               <audio ref={audioRef} className="hidden" />
 
               {isPlaying && (
-                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}
-                  className="mt-8 italic"
-                  style={{ fontFamily: "'Crimson Text', Georgia, serif", fontSize: "0.95rem", color: C.textSoft }}
+                <motion.p
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 0.5 }}
+                  className="mt-10 italic"
+                  style={{ fontFamily: "'Crimson Text', Georgia, serif", fontSize: "1rem", color: C.textSoft, letterSpacing: "0.04em" }}
                 >
-                  Listening...
+                  Listening with my whole heart…
                 </motion.p>
               )}
             </div>
           </motion.div>
 
-          {/* ── Final ending — fades IN when showFinal (no jump, smooth crossfade) ── */}
+          {/* ── Final ending — smooth crossfade in ── */}
           <motion.div
             className="absolute inset-0 flex flex-col items-center justify-center px-6"
             animate={{ opacity: showFinal ? 1 : 0 }}
-            transition={{ duration: 2.2, ease: "easeInOut", delay: showFinal ? 0.6 : 0 }}
+            transition={{ duration: 2.6, ease: "easeInOut", delay: showFinal ? 0.7 : 0 }}
             style={{ pointerEvents: showFinal ? "auto" : "none" }}
           >
             <FloatingHeartsEnding />
-            <div className="relative z-10 text-center max-w-lg">
+
+            {/* Deep glow backdrop */}
+            <div className="absolute inset-0 pointer-events-none" style={{
+              background: "radial-gradient(ellipse 70% 55% at 50% 50%, rgba(249,168,192,0.28) 0%, transparent 70%)",
+            }} />
+
+            <div className="relative z-10 text-center max-w-xl flex flex-col items-center gap-8">
               <motion.h2
-                initial={{ y: 20 }}
-                animate={showFinal ? { y: 0 } : { y: 20 }}
-                transition={{ duration: 1.8, delay: 0.8, ease: "easeOut" }}
-                style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(2rem, 7.5vw, 4.2rem)", color: C.primary, textShadow: `0 0 28px rgba(224,80,122,0.3)`, lineHeight: 1.4 }}
+                initial={{ y: 24, filter: "blur(8px)" }}
+                animate={showFinal ? { y: 0, filter: "blur(0px)" } : { y: 24, filter: "blur(8px)" }}
+                transition={{ duration: 2, delay: 1, ease: "easeOut" }}
+                style={{
+                  fontFamily: "'Playfair Display', Georgia, serif",
+                  fontSize:   "clamp(2.2rem, 8vw, 4.8rem)",
+                  color:       C.primary,
+                  textShadow: `0 0 30px rgba(224,80,122,0.32)`,
+                  lineHeight:  1.35,
+                }}
               >
                 I'd choose you.
                 <br />
-                <span style={{ fontSize: "0.72em", color: C.textSoft, fontStyle: "italic" }}>
+                <span style={{ fontSize: "0.68em", color: C.textSoft, fontStyle: "italic" }}>
                   Over and over again.
                 </span>
                 <br />
-                <span style={{ fontSize: "0.78em", color: C.text }}>
+                <span style={{ fontSize: "0.75em", color: C.text }}>
                   In every lifetime, my honey!
                 </span>
               </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={showFinal ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                transition={{ duration: 1.6, delay: 2.2, ease: "easeOut" }}
+                style={{
+                  fontFamily:   "'Crimson Text', Georgia, serif",
+                  fontSize:     "clamp(1rem, 2.8vw, 1.3rem)",
+                  color:         C.textSoft,
+                  fontStyle:    "italic",
+                  letterSpacing: "0.04em",
+                }}
+              >
+                Happy 3rd Monthsary, Honey. Thank you for being mine. ❤️
+              </motion.p>
             </div>
           </motion.div>
         </motion.div>
