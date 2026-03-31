@@ -211,7 +211,7 @@ export default function Monthsary() {
   useEffect(() => {
     if (scene !== 2) return;
     if (countdown > 0) {
-      const t = setTimeout(() => setCountdown(c => c - 1), 1500);
+      const t = setTimeout(() => setCountdown((c: number) => c - 1), 1500);
       return () => clearTimeout(t);
     }
     const t = setTimeout(() => setScene(3), 900);
