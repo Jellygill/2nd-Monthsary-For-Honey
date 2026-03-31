@@ -2,19 +2,22 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
 /* ─── The letter — rewritten to be deeply personal & emotional ─── */
-const LOVE_LETTER = `Honey,
+const LOVE_LETTER = `To my Honey,
 
-I never thought three months could feel like this — like finding a place I didn't know I was missing until you quietly became it.
+Happy 2nd Monthsary Hon!!! Ang bilis ng panahon noh hehe ;>
 
-Every morning I think of you before I've even opened my eyes. That's what you've become to me — my very first thought and my last, the warmth that turns ordinary moments into something I want to hold onto forever.
+First of all hon, before I get too emotional right now, I just want to say thank you and thank you so much for accepting me as your boyfriend! You made me so happy for all our shared moments, you made me emotional for everything that we both did together, you made my heart warm despite experiencing quarrels and for all the emotions I've felt whenever I'm with you, I thank you, my honey!
 
-You make me feel seen, Honey. Truly, completely seen. The way your eyes light up over small things, the way you laugh when something catches you off guard, the way you look at me like I'm somehow enough — I notice all of it. I keep all of it close.
+I hope and I truly hope, that for all my shortcomings, my flaws, and the times I've disappointed you, I hope it will all be embraced by my warmth love that I give you every single day.
 
-Two months of falling a little more every single day. Two months of realizing that what I feel for you isn't just love — it's the kind that settles deep, the kind that grows quietly and stays, the kind I want to keep choosing every single time.
+Always remember hon that I didn't chose you for a season, but I chose you with a future in mind. I'm always here to build, to fight through the difficult parts, and always stay by your side whenever you need me.
 
-I'm so glad you're mine. I'm so glad I get to be yours.
+I love you my constant, my cutiepie, my ka-duo sa ML, my sometimes masungit na girlfriend, my wifey, my prettiest, hottest, most beautiful Honey… my Mary Iris ❤️
 
-With everything I am, always ❤️`;
+I'm so glad you're mine.
+I'm so glad I get to be yours.
+
+With everything I am, always.`;
 
 const C = {
   bg:           "#fff0f5",
@@ -161,7 +164,39 @@ export default function Anniversary() {
   const [isPlaying,     setIsPlaying]     = useState(false);
   const [showFinal,     setShowFinal]     = useState(false);
 
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const audioRef   = useRef<HTMLAudioElement>(null);
+  const bgMusicRef = useRef<HTMLAudioElement>(null);
+
+  /* ─── Background music: start on first scene ─── */
+  useEffect(() => {
+    const bg = bgMusicRef.current;
+    if (!bg) return;
+    bg.volume = 0.6;
+    bg.loop   = true;
+    // Attempt autoplay; browsers may block until user interaction
+    bg.play().catch(() => {
+      // If autoplay blocked, play on first click/touch
+      const tryPlay = () => { bg.play().catch(() => {}); document.removeEventListener("click", tryPlay); document.removeEventListener("touchstart", tryPlay); };
+      document.addEventListener("click",      tryPlay, { once: true });
+      document.addEventListener("touchstart", tryPlay, { once: true });
+    });
+  }, []);
+
+  /* ─── Helper: smoothly adjust bgMusic volume ─── */
+  const fadeBgMusic = (targetVol: number, durationMs: number) => {
+    const bg = bgMusicRef.current;
+    if (!bg) return;
+    const steps     = 30;
+    const interval  = durationMs / steps;
+    const startVol  = bg.volume;
+    const delta     = (targetVol - startVol) / steps;
+    let   step      = 0;
+    const id = setInterval(() => {
+      step++;
+      bg.volume = Math.min(1, Math.max(0, startVol + delta * step));
+      if (step >= steps) clearInterval(id);
+    }, interval);
+  };
 
   /* Scene 1 */
   useEffect(() => {
@@ -211,16 +246,25 @@ export default function Anniversary() {
     if (scene !== 5 || !isPlaying) return;
     const audio = audioRef.current;
     if (audio && audio.src && audio.src !== window.location.href) {
-      const onEnd = () => setShowFinal(true);
+      const onEnd = () => {
+        // Fade bg music back in after voice message ends
+        fadeBgMusic(0.6, 3000);
+        setShowFinal(true);
+      };
       audio.addEventListener("ended", onEnd);
       return () => audio.removeEventListener("ended", onEnd);
     }
-    const t = setTimeout(() => setShowFinal(true), 9000);
+    const t = setTimeout(() => {
+      fadeBgMusic(0.6, 3000);
+      setShowFinal(true);
+    }, 9000);
     return () => clearTimeout(t);
   }, [scene, isPlaying]);
 
   const handlePlay = () => {
     setIsPlaying(true);
+    // Fade bg music down to a soft level so voice message is clear
+    fadeBgMusic(0.18, 2000);
     const audio = audioRef.current;
     if (audio && audio.src && audio.src !== window.location.href) {
       audio.play().catch(() => {});
@@ -597,8 +641,10 @@ export default function Anniversary() {
                 </button>
               </div>
 
-              {/* TODO: drop your voice message in the public/ folder, e.g. message.mp3, and set src="/message.mp3" */}
-              <audio ref={audioRef} className="hidden" />
+              {/* Voice message: drop your recording as /message.mp3 in the public/ folder */}
+              <audio ref={audioRef} src="/message.mp3" className="hidden" />
+              {/* Background music: drop your track as /background.mp3 in the public/ folder */}
+              <audio ref={bgMusicRef} src="/background.mp3" className="hidden" preload="auto" />
 
               {isPlaying && (
                 <motion.p
