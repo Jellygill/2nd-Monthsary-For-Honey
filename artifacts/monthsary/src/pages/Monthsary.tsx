@@ -197,7 +197,7 @@ export default function Monthsary() {
   useEffect(() => {
     const bg = bgMusicRef.current;
     if (!bg) return;
-    bg.volume = 0.25; // Lowered from 0.6 to 0.25
+    bg.volume = 0.8; // Increased reference volume for the custom mix
     bg.loop   = true;
     bg.load();
   }, []);
@@ -277,14 +277,14 @@ export default function Monthsary() {
     if (audio && audio.src && audio.src !== window.location.href) {
       const onEnd = () => {
         // Fade bg music back in after voice message ends
-        fadeBgMusic(0.25, 3000);
+        fadeBgMusic(0.8, 3000);
         setShowFinal(true);
       };
       audio.addEventListener("ended", onEnd);
       return () => audio.removeEventListener("ended", onEnd);
     }
     const t = setTimeout(() => {
-      fadeBgMusic(0.25, 3000);
+      fadeBgMusic(0.8, 3000);
       setShowFinal(true);
     }, 9000);
     return () => clearTimeout(t);
@@ -293,7 +293,7 @@ export default function Monthsary() {
   const handlePlay = () => {
     setIsPlaying(true);
     // Fade bg music down to a soft level so voice message is clear
-    fadeBgMusic(0.05, 2000); // Lowered from 0.18 to 0.05
+    fadeBgMusic(0.25, 2000); // Fades out to 25% during voice message
     const audio = audioRef.current;
     if (audio && audio.src && audio.src !== window.location.href) {
       audio.play().catch(() => {});
