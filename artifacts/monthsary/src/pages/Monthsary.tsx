@@ -153,7 +153,7 @@ const Waveform = () => (
 
 type Scene = 1 | 2 | 3 | 4 | 5;
 
-export default function Anniversary() {
+export default function Monthsary() {
   const [scene,         setScene]         = useState<Scene>(1);
   const [showMainText,  setShowMainText]  = useState(false);
   const [showSub1,      setShowSub1]      = useState(false);
