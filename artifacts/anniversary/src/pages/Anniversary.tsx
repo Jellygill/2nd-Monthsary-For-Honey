@@ -10,7 +10,7 @@ Every morning I think of you before I've even opened my eyes. That's what you've
 
 You make me feel seen, Honey. Truly, completely seen. The way your eyes light up over small things, the way you laugh when something catches you off guard, the way you look at me like I'm somehow enough — I notice all of it. I keep all of it close.
 
-Three months of falling a little more every single day. Three months of realizing that what I feel for you isn't just love — it's the kind that settles deep, the kind that grows quietly and stays, the kind I want to keep choosing every single time.
+Two months of falling a little more every single day. Two months of realizing that what I feel for you isn't just love — it's the kind that settles deep, the kind that grows quietly and stays, the kind I want to keep choosing every single time.
 
 I'm so glad you're mine. I'm so glad I get to be yours.
 
@@ -379,7 +379,7 @@ export default function Anniversary() {
                 lineHeight:  1.18,
               }}
             >
-              Happy 3rd Monthsary,{" "}
+              Happy 2nd Monthsary,{" "}
               <span style={{ color: C.primary, fontStyle: "italic" }}>
                 Honey ❤️
               </span>
@@ -662,7 +662,7 @@ export default function Anniversary() {
                   letterSpacing: "0.04em",
                 }}
               >
-                Happy 3rd Monthsary, Honey. Thank you for being mine. ❤️
+                Happy 2nd Monthsary, Honey. Thank you for being mine. ❤️
               </motion.p>
             </div>
           </motion.div>
