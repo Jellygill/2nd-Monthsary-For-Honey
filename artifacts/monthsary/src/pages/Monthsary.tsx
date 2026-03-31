@@ -772,7 +772,7 @@ export default function Monthsary() {
       )}
       {/* ─── Globally Persistent Audio Players ─── */}
       <audio ref={audioRef} src="message.mp3" className="hidden" />
-      <audio ref={bgMusicRef} src="background.mp3" className="hidden" preload="auto" />
+      <audio ref={bgMusicRef} src="background.wav" className="hidden" preload="auto" />
 
     </div>
   );
