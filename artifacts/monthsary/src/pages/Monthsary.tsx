@@ -193,8 +193,10 @@ export default function Monthsary() {
   const [isPlaying,     setIsPlaying]     = useState(false);
   const [showFinal,     setShowFinal]     = useState(false);
 
-  const audioRef   = useRef<HTMLAudioElement>(null);
-  const bgMusicRef = useRef<HTMLAudioElement>(null);
+  const audioRef    = useRef<HTMLAudioElement>(null);
+  const bgMusicRef  = useRef<HTMLAudioElement>(null);
+  const audioCtxRef = useRef<any>(null);
+  const gainNodeRef = useRef<any>(null);
 
   /* ─── Background music: prepare it but don't autoplay until click ─── */
   useEffect(() => {
@@ -208,6 +210,26 @@ export default function Monthsary() {
   const handleStart = () => {
     const bg = bgMusicRef.current;
     if (bg) {
+      // iOS Web Audio API initialization to bypass physical volume locks preventing programmatic fading
+      try {
+        if (!audioCtxRef.current) {
+          const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+          if (AudioCtx) {
+            const ctx = new AudioCtx();
+            audioCtxRef.current = ctx;
+            const gainNode = ctx.createGain();
+            gainNode.gain.value = 0.8;
+            gainNodeRef.current = gainNode;
+            const source = ctx.createMediaElementSource(bg);
+            source.connect(gainNode);
+            gainNode.connect(ctx.destination);
+          }
+        } else if (audioCtxRef.current.state === "suspended") {
+          audioCtxRef.current.resume();
+        }
+      } catch (e) {
+        console.log("Web Audio API not cleanly initialized", e);
+      }
       bg.play().catch(() => {});
     }
     setScene(1);
@@ -216,18 +238,27 @@ export default function Monthsary() {
 
   /* ─── Helper: smoothly adjust bgMusic volume ─── */
   const fadeBgMusic = (targetVol: number, durationMs: number) => {
+    const gain = gainNodeRef.current;
     const bg = bgMusicRef.current;
-    if (!bg) return;
-    const steps     = 30;
-    const interval  = durationMs / steps;
-    const startVol  = bg.volume;
-    const delta     = (targetVol - startVol) / steps;
-    let   step      = 0;
-    const id = setInterval(() => {
-      step++;
-      bg.volume = Math.min(1, Math.max(0, startVol + delta * step));
-      if (step >= steps) clearInterval(id);
-    }, interval);
+    
+    if (gain && audioCtxRef.current) {
+      // Smooth fade using iOS-compatible Web Audio API Gain Node
+      const ctx = audioCtxRef.current;
+      gain.gain.setValueAtTime(gain.gain.value, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(targetVol, ctx.currentTime + (durationMs / 1000));
+    } else if (bg) {
+      // Fallback for basic environments
+      const steps     = 30;
+      const interval  = durationMs / steps;
+      const startVol  = bg.volume;
+      const delta     = (targetVol - startVol) / steps;
+      let   step      = 0;
+      const id = setInterval(() => {
+        step++;
+        bg.volume = Math.min(1, Math.max(0, startVol + delta * step));
+        if (step >= steps) clearInterval(id);
+      }, interval);
+    }
   };
 
   /* Scene 1 */
@@ -775,7 +806,7 @@ export default function Monthsary() {
       )}
       {/* ─── Globally Persistent Audio Players ─── */}
       <audio ref={audioRef} src="message.mp3" className="hidden" />
-      <audio ref={bgMusicRef} src="background.wav" className="hidden" preload="auto" />
+      <audio ref={bgMusicRef} src="background.wav" className="hidden" preload="auto" crossOrigin="anonymous" />
 
     </div>
   );
