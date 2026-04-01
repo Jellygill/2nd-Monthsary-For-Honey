@@ -698,7 +698,7 @@ export default function Monthsary() {
                 Close your eyes for a moment…
                 <br />
                 <span style={{ fontStyle: "italic", fontSize: "0.85em", color: C.primary }}>
-                  this one is only for you.
+                  This one is for you my Honey
                 </span>
               </motion.p>
 
@@ -742,7 +742,7 @@ export default function Monthsary() {
                   className="mt-10 italic"
                   style={{ fontFamily: "'Crimson Text', Georgia, serif", fontSize: "1rem", color: C.textSoft, letterSpacing: "0.04em" }}
                 >
-                  Listening with my whole heart…
+                  Listen to this hon....
                 </motion.p>
               )}
             </div>
