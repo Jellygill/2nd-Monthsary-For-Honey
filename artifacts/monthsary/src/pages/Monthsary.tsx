@@ -12,7 +12,7 @@ I hope and I truly hope, that for all my shortcomings, my flaws, and the times I
 
 Always remember hon that I didn't chose you for a season, but I chose you with a future in mind. I'm always here to build, to fight through the difficult parts, and always stay by your side always and always.
 
-I love you my constant, my cutiepie, my ka-duo sa ML, my sometimes masungit na girlfriend, my romcom watch buddy, my teacher in cooking and medical field, my future registered nurse, my wifey, my prettiest, hottest, most beautiful Honey… my Mary Iris ❤️
+I love you my constant, my cutiepie, my ka-duo sa ML, my sometimes masungit na girlfriend, my romcom watch buddy, my teacher in cooking and medical field, my future registered nurse, my wifey, my prettiest, hottest, most beautiful Honey… my Mary Iris 💗
 
 I'm so glad you're mine.
 I'm so glad I get to be yours.
@@ -111,7 +111,7 @@ const GlowParticles = () => (
         opacity: 0.3 + (i % 4) * 0.12,
         animationDuration: `${15 + (i % 6) * 1.8}s`,
         animationDelay:    `${(i % 5) * 1.5 + 0.5}s`,
-      }}>❤️</div>
+      }}>💗</div>
     ))}
   </div>
 );
@@ -127,7 +127,7 @@ const FloatingHeartsEnding = () => (
         opacity: 0.25 + (i % 5) * 0.12,
         animationDuration: `${13 + (i % 7) * 1.8}s`,
         animationDelay:    `${(i % 7) * 0.7}s`,
-      }}>❤️</div>
+      }}>💗</div>
     ))}
   </div>
 );
@@ -415,7 +415,7 @@ export default function Monthsary() {
               }}
             >
               Hey Honey…{" "}
-              <span className="animate-heartbeat inline-block">❤️</span>
+              <span className="animate-heartbeat inline-block">💗</span>
               <br />
               <span style={{ fontStyle: "italic", color: C.textSoft, fontSize: "0.88em" }}>
                 I made something just for you.
@@ -480,7 +480,7 @@ export default function Monthsary() {
               >
                 {countdown === 3 ? "something beautiful is coming…"
                   : countdown === 2 ? "just for you, Honey…"
-                  : "here we go ❤️"}
+                  : "here we go 💗"}
               </motion.p>
             </motion.div>
           )}
@@ -520,7 +520,7 @@ export default function Monthsary() {
             >
               Happy 2nd Monthsary,{" "}
               <span style={{ color: C.primary, fontStyle: "italic" }}>
-                Honey ❤️
+                Honey 💗
               </span>
             </h1>
 
@@ -582,7 +582,7 @@ export default function Monthsary() {
               transition={{ duration: 1.4, delay: 0.2 }}
               className="flex flex-col items-center mb-8 gap-2"
             >
-              <span className="text-3xl animate-heartbeat inline-block">❤️</span>
+              <span className="text-3xl animate-heartbeat inline-block">💗</span>
               <div className="w-40 h-px" style={{ background: `linear-gradient(to right, transparent, ${C.primaryLight}, transparent)` }} />
             </motion.div>
 
@@ -798,7 +798,7 @@ export default function Monthsary() {
                   letterSpacing: "0.04em",
                 }}
               >
-                Happy 2nd Monthsary, Honey. Thank you for being mine. ❤️
+                Happy 2nd Monthsary, Honey. Thank you for being mine. 💗
               </motion.p>
             </div>
           </motion.div>
