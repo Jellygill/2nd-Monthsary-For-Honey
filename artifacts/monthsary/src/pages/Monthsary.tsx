@@ -71,10 +71,8 @@ const DigitalRain = () => {
         const y  = drops[i] * fs;
         const a  = 0.25 + ((i * 7) % 6) * 0.09;
         ctx.fillStyle   = `rgba(190,60,100,${a})`;
-        ctx.shadowBlur  = 7;
-        ctx.shadowColor = "rgba(220,80,120,0.5)";
+        // Removed ctx.shadowBlur to massively optimize mobile performance
         ctx.fillText(ch, x, y);
-        ctx.shadowBlur  = 0;
         if (y > canvas.height && Math.random() > 0.975) drops[i] = 0;
         drops[i]++;
       }
@@ -89,9 +87,10 @@ const DigitalRain = () => {
 /* ─── Glowing particles + hearts (scene 3) ─── */
 const GlowParticles = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    {Array.from({ length: 32 }).map((_, i) => (
+    {Array.from({ length: 20 }).map((_, i) => (
       <div key={i} className="absolute rounded-full animate-float" style={{
-        left:   `${(i * 3.3 + Math.sin(i * 1.7) * 16 + 50) % 100}%`,
+        willChange: "transform",
+        left:   `${(i * 5.3 + Math.sin(i * 1.7) * 16 + 50) % 100}%`,
         bottom: "-18px",
         width:  `${4 + (i % 5) * 3}px`,
         height: `${4 + (i % 5) * 3}px`,
@@ -103,9 +102,10 @@ const GlowParticles = () => (
         animationDelay:    `${(i % 7) * 0.9}s`,
       }} />
     ))}
-    {Array.from({ length: 16 }).map((_, i) => (
+    {Array.from({ length: 10 }).map((_, i) => (
       <div key={`h${i}`} className="absolute animate-float" style={{
-        left:   `${(i * 6.4 + 8) % 95}%`,
+        willChange: "transform",
+        left:   `${(i * 9.4 + 8) % 95}%`,
         bottom: "-28px",
         fontSize: `${10 + (i % 4) * 7}px`,
         opacity: 0.3 + (i % 4) * 0.12,
@@ -135,9 +135,10 @@ const FloatingHeartsEnding = () => (
 /* ─── Floating Petals ─── */
 const FloatingPetals = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-    {Array.from({ length: 25 }).map((_, i) => (
+    {Array.from({ length: 16 }).map((_, i) => (
       <div key={`p${i}`} className="absolute" style={{
-        left: `${(i * 7.3 + 12) % 100}%`,
+        willChange: "transform",
+        left: `${(i * 11.3 + 12) % 100}%`,
         top: `-10%`,
         fontSize: `${14 + (i % 4) * 6}px`,
         opacity: 0.35 + (i % 3) * 0.2,
@@ -150,18 +151,20 @@ const FloatingPetals = () => (
     ))}
     <style dangerouslySetInnerHTML={{__html: `
       @keyframes fall {
-        0% { transform: translateY(-10vh) rotate(0deg) translateX(0); }
-        50% { transform: translateY(50vh) rotate(180deg) translateX(20px); }
-        100% { transform: translateY(110vh) rotate(360deg) translateX(-20px); }
+        0% { transform: translate3d(0, -10vh, 0) rotate(0deg); }
+        50% { transform: translate3d(20px, 50vh, 0) rotate(180deg); }
+        100% { transform: translate3d(-20px, 110vh, 0) rotate(360deg); }
       }
     `}} />
   </div>
 );
 
 /* ─── Drifting bokeh orb ─── */
-const Orb = ({ style }: { style: React.CSSProperties }) => (
-  <div className="absolute rounded-full animate-drift pointer-events-none" style={style} />
-);
+const Orb = ({ style }: { style: React.CSSProperties }) => {
+  // Mobile optimization: CSS blur filter is incredibly expensive. We strip it and let radial-gradient do the work.
+  const optimizedStyle = { ...style, filter: undefined, willChange: "transform, opacity" };
+  return <div className="absolute rounded-full animate-drift pointer-events-none" style={optimizedStyle} />;
+};
 
 /* ─── Waveform bars ─── */
 const Waveform = () => (
@@ -556,9 +559,9 @@ export default function Monthsary() {
             <div
               className="rounded-3xl px-8 py-10 md:px-14 md:py-12"
               style={{
-                background:      "rgba(255,255,255,0.62)",
-                backdropFilter:  "blur(16px)",
-                boxShadow:       "0 10px 70px rgba(224,80,122,0.14), 0 2px 16px rgba(224,80,122,0.08)",
+                background:      "rgba(255,255,255,0.7)",
+                backdropFilter:  "blur(8px)", // Reduced from 16px to 8px for huge mobile performance gain
+                boxShadow:       "0 10px 40px rgba(224,80,122,0.1), 0 2px 10px rgba(224,80,122,0.05)", // Weakened heavy shadows
                 border:          "1px solid rgba(249,168,192,0.4)",
               }}
             >
