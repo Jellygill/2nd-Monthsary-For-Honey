@@ -805,7 +805,7 @@ export default function Monthsary() {
         </motion.div>
       )}
       {/* ─── Globally Persistent Audio Players ─── */}
-      <audio ref={audioRef} src="message.mp3" className="hidden" />
+      <audio ref={audioRef} src="voice_message.mp3" className="hidden" preload="auto" />
       <audio ref={bgMusicRef} src="background.wav" className="hidden" preload="auto" crossOrigin="anonymous" />
 
     </div>
